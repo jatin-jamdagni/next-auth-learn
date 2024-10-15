@@ -51,3 +51,15 @@ export async function handleRegister(values: RegisterProps) {
     success: "Email Sent!"
   }
 }
+// export async function handleForgetPassword(values: ForgetProps) {
+//   //   const { email, password } = props;
+//   console.log("these are values ", values)
+
+//   const validateFields = ForgetSchema.safeParse(values);
+//   if (!validateFields.success) {
+//     return { error: "Invalid fields!" }
+//   }
+//   return {
+//     success: "Email Sent!"
+//   }
+// }
