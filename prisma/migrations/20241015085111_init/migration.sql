@@ -1,0 +1,73 @@
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
+
+-- CreateTable
+CREATE TABLE "User" (
+    "_id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "Kits" (
+    "_id" SERIAL NOT NULL,
+    "MC_NO" TEXT NOT NULL,
+    "MC_NAME" TEXT NOT NULL,
+    "MC_EPC" TEXT NOT NULL,
+    "CC_NO" TEXT NOT NULL,
+    "CC_NAME" TEXT NOT NULL,
+    "CC_EPCNO" TEXT NOT NULL,
+    "PACK_NO" INTEGER NOT NULL,
+    "PACK_NAME" TEXT NOT NULL,
+    "PACK_EPC" TEXT NOT NULL,
+    "PACK_BATCHNO" TEXT NOT NULL,
+    "PACK_EXPIRY" TIMESTAMP(3),
+    "TRAY_NO" TEXT,
+    "SKU_CODE" TEXT NOT NULL,
+    "SKU_NAME" TEXT NOT NULL,
+    "SKU_QTY" INTEGER NOT NULL,
+    "SKU_BATCH" TEXT,
+    "BATCH_EXPIRY" TIMESTAMP(3) NOT NULL,
+    "PACK_CODE" TEXT NOT NULL,
+    "STATUS" TEXT NOT NULL,
+    "UNIT" TEXT,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Kits_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateTable
+CREATE TABLE "KitImages" (
+    "_id" SERIAL NOT NULL,
+    "PACK_CODE" TEXT NOT NULL,
+    "IMAGE_URL" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "itemId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "KitImages_pkey" PRIMARY KEY ("_id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "KitImages_PACK_CODE_key" ON "KitImages"("PACK_CODE");
+
+-- AddForeignKey
+ALTER TABLE "Kits" ADD CONSTRAINT "Kits_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "KitImages" ADD CONSTRAINT "KitImages_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "KitImages" ADD CONSTRAINT "KitImages_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "Kits"("_id") ON DELETE RESTRICT ON UPDATE CASCADE;

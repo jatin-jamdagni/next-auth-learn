@@ -1,13 +1,16 @@
-// import NextAuth from "next-auth";
-// import Credentials from "next-auth/providers/credentials";
-// import { signInSchema } from "./zod/auth.zod";
- 
-// type User = {
-//   id: number;
-//   name: string;
-//   email: string;
-//    role?: string;
-// };
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import prisma from "@/lib/db";
+import authConfig from "@/auth.config";
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
+  },
+  ...authConfig,
+});
+
 // export const { handlers, signIn, signOut, auth } = NextAuth({
 //   providers: [
 //     Credentials({
@@ -15,7 +18,7 @@
 //         email: {},
 //         password: {},
 //       },
-//       authorize : async (credentials): Promise<User | null> =>{
+//       authorize: async (credentials): Promise<User | null> => {
 //         let user: User | null = null;
 
 //         const parsedCredentials = signInSchema.safeParse(credentials);

@@ -10,7 +10,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
-import { handleCredentialsSignIn, handleRegister } from '@/actions/authAction'
+import {  handleRegister } from '@/actions/authAction'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 export default function RegisterForm() {

@@ -7,42 +7,94 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  accounts      Account[]
+  role          Role      @default(USER)
+  emailVerified DateTime?
+  image         String?
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id            String  @id @default(cuid())
+  userId        String
+  isActive      Boolean @default(true)
+  refresh_token String?
+  access_token  String?
+  expires_at    Int?
+  token_type    String?
+  scope         String?
+  id_token      String?
+  session_state String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // @@unique([provider, providerAccountId])
+}
+
 enum Role {
   USER
   ADMIN
   SUPERADMIN
 }
 
-model User {
-  id        Int      @id @default(autoincrement()) @map("_id")
-  email     String   @unique
-  name      String
-  password  String
-  role      Role     @default(USER)
-  items     Item[]   @relation("UserItems")
-  images    Image[]  @relation("UserImages")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model User {
+//   id        Int         @id @default(autoincrement()) @map("_id")
+//   email     String      @unique
+//   name      String
+//   password  String
+//   role      Role        @default(USER)
+//   items     Kits[]      @relation("UserKits")
+//   images    KitImages[] @relation("UserImages")
+//   createdAt DateTime    @default(now())
+//   updatedAt DateTime    @updatedAt
+// }
 
-model Item {
-  id          Int      @id @default(autoincrement()) @map("_id")
-  name        String
-  description String
-  user        User     @relation("UserItems", fields: [userId], references: [id])
-  userId      Int
-  images      Image[]  @relation("ItemImages")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+// model Kits {
+//   id           Int         @id @default(autoincrement()) @map("_id")
+//   MC_NO        String
+//   MC_NAME      String
+//   MC_EPC       String
+//   CC_NO        String
+//   CC_NAME      String
+//   CC_EPCNO     String
+//   PACK_NO      Int
+//   PACK_NAME    String
+//   PACK_EPC     String
+//   PACK_BATCHNO String
+//   PACK_EXPIRY  DateTime?
+//   TRAY_NO      String?
+//   SKU_CODE     String
+//   SKU_NAME     String
+//   SKU_QTY      Int
+//   SKU_BATCH    String?
+//   BATCH_EXPIRY DateTime
+//   PACK_CODE    String
+//   STATUS       String
+//   UNIT         String?
+//   user         User        @relation("UserKits", fields: [userId], references: [id])
+//   userId       Int
+//   images       KitImages[] @relation("KitImages")
+//   createdAt    DateTime    @default(now())
+//   updatedAt    DateTime    @updatedAt
+// }
 
-model Image {
-  id        Int      @id @default(autoincrement()) @map("_id")
-  url       String
-  user      User     @relation("UserImages", fields: [userId], references: [id])
-  userId    Int
-  item      Item     @relation("ItemImages", fields: [itemId], references: [id])
-  itemId    Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+// model KitImages {
+//   id        Int      @id @default(autoincrement()) @map("_id")
+//   PACK_CODE String   @unique
+//   IMAGE_URL String
+//   user      User     @relation("UserImages", fields: [userId], references: [id])
+//   userId    Int
+//   item      Kits     @relation("KitImages", fields: [itemId], references: [id])
+//   itemId    Int
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
