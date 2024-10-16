@@ -40,6 +40,10 @@ model Account {
   // @@unique([provider, providerAccountId])
 }
 
+// model verificationToken {
+//   id
+// }
+
 enum Role {
   USER
   ADMIN

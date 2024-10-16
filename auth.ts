@@ -1,15 +1,69 @@
-import NextAuth from "next-auth";
+import NextAuth, {  NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import prisma from "@/lib/db";
+import { PrismaClient } from "@prisma/client";
 import authConfig from "@/auth.config";
+import { getUserById } from "./data/user";
+import { Role } from "@prisma/client";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+const prisma = new PrismaClient();
+
+export const authOptions: NextAuthConfig = {
+
+  pages: {
+    signIn: "/auth/login",
+    error: "/auth/error"
+  },
+  callbacks: {
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+      }
+      if (token.role && session.user) { 
+        session.user.role = token.role as Role
+      }
+      return session;
+    },
+
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      try {
+        const existingUser = await getUserById(token.sub);
+        if (existingUser) {
+          token.role = existingUser.role;
+        }
+      } catch (error) {
+        console.error("Error fetching user for JWT:", error);
+      }
+
+      return token;
+    },
+  },
+  
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
   },
   ...authConfig,
-});
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // export const { handlers, signIn, signOut, auth } = NextAuth({
 //   providers: [

@@ -42,9 +42,9 @@ export async function handleCredentialsSignIn(values: LoginProps) {
   }
 
   
-  return {
-    success: "Email Sent!",
-  };
+  // return {
+  //   success: "Email Sent!",
+  // };
 }
 
 export async function handleRegister(values: RegisterProps) {
@@ -71,7 +71,7 @@ export async function handleRegister(values: RegisterProps) {
     },
   });
 
-  //TODO: Send verification email
+  //TODO:if Send verification email
 
   return {
     success: "User Created!",
