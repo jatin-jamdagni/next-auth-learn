@@ -12,8 +12,7 @@ import {
 } from "@/schemas";
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { redirect } from "next/dist/server/api-utils";
-
+ 
 export async function handleCredentialsSignIn(values: LoginProps) {
   const validateFields = LoginSchema.safeParse(values);
   if (!validateFields.success) {
@@ -42,9 +41,9 @@ export async function handleCredentialsSignIn(values: LoginProps) {
   }
 
   
-  return {
-    success: "Email Sent!",
-  };
+  // return {
+  //   success: "Email Sent!",
+  // };
 }
 
 export async function handleRegister(values: RegisterProps) {
