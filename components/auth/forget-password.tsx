@@ -29,8 +29,8 @@ export const ForgetPassword = () => {
     startTransition(() => {
       console.log("submit")
       handleCredentialsSignIn(values).then((data => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        // setSuccess(data.success);
      
       }))
     })
