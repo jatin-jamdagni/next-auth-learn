@@ -9,12 +9,12 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
-import { handleCredentialsSignIn } from '@/actions/authAction'
-import { useSearchParams } from 'next/navigation'
+ import { useSearchParams } from 'next/navigation'
+import { handleCredentialsSignIn } from '@/actions/login'
 
 export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>('');
-  // const [success, setSuccess] = useState<string | undefined>('');
+  const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
 
 
@@ -32,21 +32,20 @@ export const LoginForm = () => {
     setError("");
     // setSuccess("")
     startTransition(() => {
-      console.log("submit")
-      handleCredentialsSignIn(values).then((data => {
+       handleCredentialsSignIn(values).then((data => {
         setError(data?.error);
-        // setSuccess(data?.success);
+        setSuccess(data?.success);
      // TODO: if 2FA is needed
       }))
     })
-    console.log(values)
-  }
+   }
 
   return (
     <CardWrapper
       headerLabel='Welcome Back'
       backButtonHref='/auth/forget-password'
       backButtonLabel='Forget password'
+      // showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}
@@ -78,7 +77,7 @@ export const LoginForm = () => {
             />
           </div>
           <FormError message={error || urlError} />
-          {/* <FormSuccess message={success} /> */}
+          <FormSuccess message={success} />
           <Button disabled={isPending} className='w-full' type='submit'>
             Login
           </Button>

@@ -10,7 +10,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
-import {  handleRegister } from '@/actions/authAction'
+import {  handleRegister } from '@/actions/register'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
 
 export default function RegisterForm() {
@@ -40,7 +40,9 @@ export default function RegisterForm() {
   }
 
   return (
-    <CardWrapper headerLabel='Create an account'>
+    <CardWrapper headerLabel='Create an account'
+    //  showSocial
+     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
           <div className='space-y-4'>

@@ -9,7 +9,7 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { FormError } from '../form-error'
 import { FormSuccess } from '../form-success'
-import { handleCredentialsSignIn } from '@/actions/authAction'
+import { handleCredentialsSignIn } from '@/actions/login'
 
 export const ForgetPassword = () => {
   const [error, setError] = useState<string | undefined>('');
@@ -27,15 +27,13 @@ export const ForgetPassword = () => {
     setError("");
     // setSuccess("")
     startTransition(() => {
-      console.log("submit")
-      handleCredentialsSignIn(values).then((data => {
+       handleCredentialsSignIn(values).then((data => {
         setError(data?.error);
         // setSuccess(data.success);
      
       }))
     })
-    console.log(values)
-  }
+   }
 
   return (
     <CardWrapper
