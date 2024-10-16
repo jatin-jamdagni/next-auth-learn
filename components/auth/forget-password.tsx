@@ -13,7 +13,7 @@ import { handleCredentialsSignIn } from '@/actions/authAction'
 
 export const ForgetPassword = () => {
   const [error, setError] = useState<string | undefined>('');
-  const [success, setSuccess] = useState<string | undefined>('');
+  // const [success, setSuccess] = useState<string | undefined>('');
   const [isPending, startTransition] = useTransition();
   const form = useForm<LoginProps>({
     resolver: zodResolver(LoginSchema),
@@ -25,12 +25,12 @@ export const ForgetPassword = () => {
 
   const onSubmit = (values: LoginProps) => {
     setError("");
-    setSuccess("")
+    // setSuccess("")
     startTransition(() => {
       console.log("submit")
       handleCredentialsSignIn(values).then((data => {
-        setError(data.error);
-        setSuccess(data.success);
+        setError(data?.error);
+        // setSuccess(data.success);
      
       }))
     })
@@ -61,7 +61,7 @@ export const ForgetPassword = () => {
             />
           </div>
           <FormError message={error} />
-          <FormSuccess message={success} />
+          {/* <FormSuccess message={success} /> */}
           <Button disabled={isPending} className='w-full' type='submit'>
             Send reset mail
           </Button>
