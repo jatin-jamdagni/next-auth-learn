@@ -31,3 +31,7 @@ export const RegisterSchema = z.object({
 })
 
 export type RegisterProps = z.infer<typeof RegisterSchema>
+
+
+
+// export type UserRole = "ADMIN" | "USER" | "SUPERUSER";
