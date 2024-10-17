@@ -4,7 +4,7 @@
  * @type {string[]}
  */
 
-export const publicRoutes = ["/","/auth/error"];
+export const publicRoutes = ["/","/auth/new-verification"];
 
 
 /**
@@ -12,7 +12,7 @@ export const publicRoutes = ["/","/auth/error"];
  * These routes use to authenicate
  * @type {string[]}
  */
-export const authRoutes = ["/auth/login", "/auth/register"];
+export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
 
 /**
  * The prefix for API authentication routes

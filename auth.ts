@@ -1,4 +1,4 @@
-import NextAuth, {  NextAuthConfig } from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import authConfig from "@/auth.config";
@@ -8,13 +8,33 @@ import { Role } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthConfig = {
-
   pages: {
     signIn: "/auth/login",
-    error: "/auth/error"
+    error: "/auth/error",
   },
+
+  events: {
+    async linkAccount({ user }) {
+      await prisma.user.update({
+        where: { id: user.id },
+        data: {
+          emailVerified: new Date(),
+        },
+      });
+    },
+  },
+
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account }) {
+      // TODO: Do it when credentials need to be here
+      // if (account?.provider !== "credentials") return true;
+
+      const existingUser = await getUserById(user.id!);
+      
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
+
+
       return true;
     },
 
@@ -22,8 +42,8 @@ export const authOptions: NextAuthConfig = {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
-      if (token.role && session.user) { 
-        session.user.role = token.role as Role
+      if (token.role && session.user) {
+        session.user.role = token.role as Role;
       }
       return session;
     },
@@ -43,7 +63,7 @@ export const authOptions: NextAuthConfig = {
       return token;
     },
   },
-  
+
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
@@ -52,22 +72,6 @@ export const authOptions: NextAuthConfig = {
 };
 
 export const { handlers, auth, signIn, signOut } = NextAuth(authOptions);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // export const { handlers, signIn, signOut, auth } = NextAuth({
 //   providers: [

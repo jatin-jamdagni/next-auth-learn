@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getUserByEmail } from "@/data/user";
+import { sendVerificatioinMail } from "@/lib/mail";
 import { genrateVerificationToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import {
@@ -25,7 +26,10 @@ export async function handleCredentialsSignIn(values: LoginProps) {
   
   if(!existingUser.emailVerified){
     const genrateToken = await genrateVerificationToken(existingUser.email);
-
+    await sendVerificatioinMail({
+      email: genrateToken.email,
+      token: genrateToken.token,
+    });
     return {
       success: "Confirmation email sent!"
     }
@@ -33,7 +37,7 @@ export async function handleCredentialsSignIn(values: LoginProps) {
 
 
   try {
-    await signIn("credentials", {
+    await signIn(" ", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
