@@ -2,8 +2,8 @@
 
 import { getUserByEmail } from "@/data/user";
 import prisma from "@/lib/db";
-import { sendVerificatioinMail } from "@/lib/mail";
-import { genrateVerificationToken } from "@/lib/tokens";
+import { sendVerificationMail } from "@/lib/mail";
+import { generateVerificationToken } from "@/lib/tokens";
 import { RegisterProps, RegisterSchema } from "@/schemas";
 import bcrypt from "bcryptjs";
 
@@ -31,8 +31,8 @@ export async function handleRegister(values: RegisterProps) {
     },
   });
 
-  const vertificationToken = await genrateVerificationToken(email);
-  await sendVerificatioinMail({
+  const vertificationToken = await generateVerificationToken(email);
+  await sendVerificationMail({
     email: vertificationToken.email,
     token: vertificationToken.token,
   });

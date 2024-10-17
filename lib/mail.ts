@@ -1,18 +1,17 @@
-import EmailVerification from "@/components/email/email-verification";
+// import EmailVerification from "@/components/email/email-verification";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const sendVerificatioinMail = async ({
+export const sendVerificationMail = async ({
   email,
   token,
 }: {
   email: string;
   token: string;
 }) => {
-  const confirmationLink = `https://3000-idx-next-auth-learngit-1728975951273.cluster-3g4scxt2njdd6uovkqyfcabgo6.cloudworkstations.dev/auth/new-verification?token=${token}`;
-  console.log("this is my mial", email);
-   await resend.emails.send({
+  const confirmationLink = `${process.env.APP_URL}/new-verification?token=${token}`;
+    await resend.emails.send({
     from: 'Acme <onboarding@resend.dev>',
     to: email,
     subject: "Confirm your email",
